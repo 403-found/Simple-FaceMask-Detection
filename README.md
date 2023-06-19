@@ -1,0 +1,1 @@
+This is a Simple Face Mask Detection Project made by me using Transfer Learning. The model used here is ConvNet and the last three layers of the model are modified according to the needs of the model. After 3-4 epochs this model gives around 98% accuracy(this model should not be used after training for only one epoch). I hope the model fulfills its purpose properly.

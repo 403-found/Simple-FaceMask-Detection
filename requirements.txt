@@ -1,4 +1,4 @@
-streamlit==1.25.0
+streamlit>=0.89.0,<0.93.0
 opencv-python==4.5.3.56
 numpy==1.19.5
-tensorflow==2.6.0
+tensorflow>=2.5.0,<2.7.0

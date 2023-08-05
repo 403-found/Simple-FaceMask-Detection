@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 
 # Load the pre-trained model
-model = load_model(r'C:\Users\ghata\OneDrive\Desktop\Simple-FaceMask-Detection\my_model3.h5')
+model = load_model(r'my_model3.h5')
 
 def detect_mask(frame):
     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')

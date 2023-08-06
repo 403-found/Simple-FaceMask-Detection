@@ -57,9 +57,36 @@ def detect_mask(frame):
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0))
 
     return frame
-
+# Custom CSS to style the page
+st.markdown(
+    """
+    <style>
+    .header {
+        padding: 10px;
+        background-color: #f0f0f0;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+    .footer {
+        text-align: center;
+        color: #777777;
+        margin-top: 30px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+#Create the Streamlit app
 def main():
     st.title("Real-time Face Mask Detection")
+    st.markdown('<div class="header">Real-time Face Mask Detection</div>', unsafe_allow_html=True)
+
+    # Create a sidebar with app information
+    st.sidebar.title("About")
+    st.sidebar.info("This app uses a pre-trained model(MobileNet) to detect face masks in real-time using your webcam.")
 
     # Create a WebRTC video chat component
     webrtc_ctx = webrtc.webrtc_streamer(
@@ -84,6 +111,8 @@ def main():
 
             # Display the frame with face mask detection
             st.image(result_frame, channels="BGR", caption="Face Mask Detection", use_column_width=True)
+      # Footer
+    st.markdown('<div class="footer">Created with ❤️ by Spandan Ghatak</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

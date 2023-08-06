@@ -82,7 +82,7 @@ st.markdown(
 #Create the Streamlit app
 def main():
     st.title("Real-time Face Mask Detection")
-    st.markdown('<div class="header">Real-time Face Mask Detection</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">COVID 19 FaceMask Detector</div>', unsafe_allow_html=True)
 
     # Create a sidebar with app information
     st.sidebar.title("About")

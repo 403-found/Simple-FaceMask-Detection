@@ -6,6 +6,14 @@ from tensorflow.keras.models import load_model
 # Load the pre-trained model
 model = load_model(r'my_model3.h5')
 
+def find_camera_index():
+    for i in range(10):
+        cap = cv2.VideoCapture(i)
+        if cap.isOpened():
+            cap.release()
+            return i
+    return -1  # No camera found
+    
 def detect_mask(frame):
     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -86,8 +94,13 @@ def main():
     st.sidebar.title("About")
     st.sidebar.info("This app uses a pre-trained model to detect face masks in real-time using your webcam.")
 
-    cap = cv2.VideoCapture(0)
-
+    camera_index = find_camera_index()
+    
+    if camera_index == -1:
+        st.error("No camera found.")
+        return
+    
+    cap = cv2.VideoCapture(camera_index)
     # Check if the webcam is opened correctly
     if not cap.isOpened():
         st.error("Cannot access the webcam")

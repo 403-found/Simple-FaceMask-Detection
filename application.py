@@ -86,7 +86,7 @@ def main():
     st.sidebar.title("About")
     st.sidebar.info("This app uses a pre-trained model to detect face masks in real-time using your webcam.")
 
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
 
     # Check if the webcam is opened correctly
     if not cap.isOpened():

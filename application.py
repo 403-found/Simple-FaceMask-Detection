@@ -37,7 +37,7 @@ def detect_mask(frame):
                     status = "No Mask"
                     x1, y1, w1, h1 = 0, 0, 175, 75
                     # Draw black background rectangle
-                    cv2.rectangle(frame, (x1, x1), (x1+w1, y1+h1), (0, 0, 0), -1)
+                    cv2.rectangle(frame, (x1, y1), (x1+w1, y1+h1), (0, 0, 0), -1)
 
                     # Add text
                     cv2.putText(frame, status, (x1 + int(w1/10), y1 + int(h1/2)),
@@ -48,7 +48,7 @@ def detect_mask(frame):
                     status = "Face Mask"
                     x1, y1, w1, h1 = 0, 0, 175, 75
                     # Draw black background rectangle
-                    cv2.rectangle(frame, (x1, x1), (x1+w1, y1+h1), (0, 0, 0), -1)
+                    cv2.rectangle(frame, (x1, y1), (x1+w1, y1+h1), (0, 0, 0), -1)
 
                     # Add text
                     cv2.putText(frame, status, (x1 + int(w1/10), y1 + int(h1/2)),
@@ -62,7 +62,7 @@ def main():
     st.title("Real-time Face Mask Detection")
 
     # Create a WebRTC video chat component
-    webrtc_streamer = webrtc.webrtc_streamer(
+    webrtc_ctx = webrtc.webrtc_streamer(
         key="example",
         mode=webrtc.WebRtcMode.SENDRECV,
         rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
@@ -71,9 +71,9 @@ def main():
     )
 
     # Continuously capture frames from the camera until the "Stop" button is pressed
-    while webrtc_streamer:
+    while webrtc_ctx.video_receiver:
         # Get the latest frame from the video chat component
-        frame = webrtc_streamer.video_frame
+        frame = webrtc_ctx.video_receiver.frame
 
         if frame is not None:
             # Convert the frame to OpenCV format

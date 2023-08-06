@@ -84,7 +84,7 @@ def main():
 
     # Create a sidebar with app information
     st.sidebar.title("About")
-    st.sidebar.info("This app uses a pre-trained model to detect face masks in real-time using your webcam.")
+    st.sidebar.info("This app uses a pre-trained model(MobileNet) to detect face masks in real-time using your webcam.")
 
     cap = cv2.VideoCapture(cv2.CAP_V4L2)
     # Check if the webcam is opened correctly

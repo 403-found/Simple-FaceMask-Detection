@@ -101,16 +101,14 @@ def main():
     while webrtc_ctx.video_receiver:
         # Get the latest frame from the video chat component
         frame = webrtc_ctx.video_receiver.frame
+        # Convert the frame to OpenCV format
+        img = frame.to_ndarray(format="bgr24")
 
-        if frame is not None:
-            # Convert the frame to OpenCV format
-            img = frame.to_ndarray(format="bgr24")
+        # Perform face mask detection on the frame
+        result_frame = detect_mask(img)
 
-            # Perform face mask detection on the frame
-            result_frame = detect_mask(img)
-
-            # Display the frame with face mask detection
-            st.image(result_frame, channels="BGR", caption="Face Mask Detection", use_column_width=True)
+        # Display the frame with face mask detection
+        st.image(result_frame, channels="BGR", caption="Face Mask Detection", use_column_width=True)
       # Footer
     st.markdown('<div class="footer">Created with ❤️ by Spandan Ghatak</div>', unsafe_allow_html=True)
 

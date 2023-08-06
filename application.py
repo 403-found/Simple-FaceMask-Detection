@@ -3,9 +3,12 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 from pathlib import Path
+import av
+import streamlit_webrtc as webrtc
+
 # Load the pre-trained model
 model = load_model(r'my_model3.h5')
-    
+
 def detect_mask(frame):
     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -54,73 +57,27 @@ def detect_mask(frame):
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0))
 
     return frame
-# Custom CSS to style the page
-st.markdown(
-    """
-    <style>
-    .header {
-        padding: 10px;
-        background-color: #f0f0f0;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: #333333;
-        margin-bottom: 20px;
-    }
-    .footer {
-        text-align: center;
-        color: #777777;
-        margin-top: 30px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
-# Create a Streamlit app
 def main():
     st.title("Real-time Face Mask Detection")
-    st.markdown('<div class="header">Real-time Face Mask Detection</div>', unsafe_allow_html=True)
 
-    # Create a sidebar with app information
-    st.sidebar.title("About")
-    st.sidebar.info("This app uses a pre-trained model(MobileNet) to detect face masks in real-time using your webcam.")
+    # Create a WebRTC video chat component
+    webrtc_ctx = webrtc.StreamerRTC(ctx=webrtc.ClientSettings())
 
-    cap = cv2.VideoCapture(2)
-    # Check if the webcam is opened correctly
-    if not cap.isOpened():
-        st.error("Cannot access the webcam")
-        return
+    # Continuously capture frames from the camera until the "Stop" button is pressed
+    while webrtc_ctx.video_receiver:
+        # Get the latest frame from the video chat component
+        frame = webrtc_ctx.video_receiver.get_frame(timeout=1.0)
 
-    exit_button_pressed = False  # Initialize a flag to track the "Exit" button status
-    exit_button = st.sidebar.button("Exit")
+        if frame is not None:
+            # Convert the frame to OpenCV format
+            img = frame.to_ndarray(format="bgr24")
 
-    # Create an empty placeholder to display the frame
-    frame_placeholder = st.empty()
+            # Perform face mask detection on the frame
+            result_frame = detect_mask(img)
 
-    # Continuously capture frames from the camera until the "Exit" button is pressed
-    while not exit_button_pressed:
-        ret, frame = cap.read()
-
-        if not ret:
-            st.error("Failed to grab the frame")
-            break
-
-        # Perform face mask detection on the frame
-        result_frame = detect_mask(frame)
-
-        # Display the frame with face mask detection in the same location by updating the placeholder
-        frame_placeholder.image(result_frame, channels="BGR", caption="Face Mask Detection", use_column_width=True)
-
-        # Update the state of the "Exit" button and check if it is pressed
-        exit_button_pressed = exit_button
-
-    # Release the webcam and close OpenCV windows
-    cap.release()
-    cv2.destroyAllWindows()
-
-    # Footer
-    st.markdown('<div class="footer">Created with ❤️ by Spandan Ghatak</div>', unsafe_allow_html=True)
+            # Display the frame with face mask detection
+            st.image(result_frame, channels="BGR", caption="Face Mask Detection", use_column_width=True)
 
 if __name__ == "__main__":
     main()

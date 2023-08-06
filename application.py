@@ -62,12 +62,18 @@ def main():
     st.title("Real-time Face Mask Detection")
 
     # Create a WebRTC video chat component
-    webrtc_ctx = webrtc.StreamerRTC(ctx=webrtc.ClientSettings())
+    webrtc_streamer = webrtc.webrtc_streamer(
+        key="example",
+        mode=webrtc.WebRtcMode.SENDRECV,
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        video_transformer_factory=None,
+        async_transform=True,
+    )
 
     # Continuously capture frames from the camera until the "Stop" button is pressed
-    while webrtc_ctx.video_receiver:
+    while webrtc_streamer:
         # Get the latest frame from the video chat component
-        frame = webrtc_ctx.video_receiver.get_frame(timeout=1.0)
+        frame = webrtc_streamer.video_frame
 
         if frame is not None:
             # Convert the frame to OpenCV format

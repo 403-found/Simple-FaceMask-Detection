@@ -2,7 +2,7 @@ import streamlit as st
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
-
+from pathlib import Path
 # Load the pre-trained model
 model = load_model(r'my_model3.h5')
     
